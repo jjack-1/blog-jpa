@@ -13,7 +13,7 @@ public class BoardRepositoryTest {
 
     @Test
     public void findById_test() {
-        Board board = boardRepository.findById(1);
+        Board board = boardRepository.findByIdV2(1);
         System.out.println(board.getId());
         System.out.println(board.getTitle());
         System.out.println(board.getUser().getUsername());
