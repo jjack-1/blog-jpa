@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 public class UserRepository {
     private final EntityManager em;
 
+    public void save2(User user) {
+        em.persist(user);
+    }
+
     public void save(String username, String password, String email) {
         Query query = em.createNativeQuery("insert into user_tb (username, password, email, created_at) values (?, ?, ?, now())");
         query.setParameter(1, username);
