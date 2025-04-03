@@ -1,12 +1,11 @@
-package shop.mtcoding.blog.board;
+package shop.mtcoding.blog.user;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-@RequiredArgsConstructor
 @Repository
-public class BoardRepository {
+@RequiredArgsConstructor
+public class UserRepository {
     private final EntityManager em;
-
 }
