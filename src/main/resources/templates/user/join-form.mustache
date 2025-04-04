@@ -28,6 +28,28 @@
 <script>
 	let isUsernameAvailable = false;
 
+	// 1. 유저네임 변경 감지
+	let usernameDom = document.querySelector("#username");
+	usernameDom.addEventListener("keyup", () => {
+		isUsernameAvailable = false;
+	})
+
+	// 2. 유저네임 중복 체크
+	async function checkUsernameAvailable() {
+		let username = document.querySelector("#username").value;
+		let response = await fetch("/check-username-available/" + username);
+		let responseBody = await response.json();
+		// status = 200, msg = 성공, body: { "available" : true }
+		isUsernameAvailable = responseBody.body.available;
+
+		if (isUsernameAvailable) {
+			alert("사용 가능한 아이디 입니다")
+		} else {
+			alert("사용 불가능한 아이디 입니다")
+		}
+	}
+
+	// 3. 최종 유효성 검사
 	function valid() {
 		if (!isUsernameAvailable) {
 			alert("아이디 중복 체크를 해주세요");
@@ -35,14 +57,6 @@
 		}
 
 		return true;
-	}
-
-	async function checkUsernameAvailable() {
-		let username = document.querySelector("#username").value;
-		let response = await fetch("/check-username-available/" + username);
-		let responseBody = await response.json();
-		// status = 200, msg = 성공, body: { "available" : true }
-		isUsernameAvailable = responseBody.body.available;
 	}
 </script>
 
