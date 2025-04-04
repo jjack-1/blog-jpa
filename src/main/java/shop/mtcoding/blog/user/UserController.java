@@ -21,7 +21,7 @@ public class UserController {
     public String join(UserRequest.JoinDTO joinDTO) {
         System.out.println(joinDTO);
         userService.회원가입(joinDTO);
-        return "redirect:/join-form";
+        return "redirect:/login-form";
     }
 
 
@@ -35,6 +35,6 @@ public class UserController {
         System.out.println(loginDTO);
         User sessionUser = userService.로그인(loginDTO);
         session.setAttribute("sessionUser", sessionUser);
-        return "redirect:/login-form";
+        return "redirect:/";
     }
 }

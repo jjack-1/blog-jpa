@@ -1,7 +1,6 @@
 package shop.mtcoding.blog.user;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,26 +9,33 @@ import org.springframework.stereotype.Repository;
 public class UserRepository {
     private final EntityManager em;
 
-    public void save2(User user) {
-        em.persist(user);
-    }
+    /*
+     * 1. createNativeQuery -> 기본 쿼리
+     * 2. createQuery -> JPA가 제공해주는 객체지향 쿼리(JPQL)
+     *      "select u from User u where u.username = :username"
+     *      user_tb -> User 객체
+     *      u -> 별칭
+     * 3. createNamedQuery -> Query Method 함수 이름으로 쿼리 생성 x
+     * 4. createEntityGraph -> x
+     * */
 
-    public void save(String username, String password, String email) {
-        Query query = em.createNativeQuery("insert into user_tb (username, password, email, created_at) values (?, ?, ?, now())");
-        query.setParameter(1, username);
-        query.setParameter(2, password);
-        query.setParameter(3, email);
-        query.executeUpdate();
+    public void save(User user) {
+        em.persist(user); // 2. user -> 영속 객체
+        // 3. user -> db와 동기화
     }
 
     public User findByUsername(String username) {
-        Query query = em.createNativeQuery("select * from user_tb where username = ?", User.class);
-        query.setParameter(1, username);
-
         try {
-            return (User) query.getSingleResult();
+            return em.createQuery("select u from User u where u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public User findById(int id) {
+        // id에 들어가는 값은 pk만 가능
+        return em.find(User.class, id);
     }
 }
