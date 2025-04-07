@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.user.User;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -14,5 +16,9 @@ public class BoardService {
     public void 글쓰기(BoardRequest.SaveDTO saveDTO, User sessionUser) {
         Board board = saveDTO.toEntity(sessionUser);
         boardRepository.save(board);
+    }
+
+    public List<Board> 목록보기(Integer userId) {
+        return boardRepository.findAll(userId);
     }
 }
