@@ -26,9 +26,8 @@ public class UserController {
 
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO joinDTO) {
-        System.out.println(joinDTO);
         userService.회원가입(joinDTO);
-        return "redirect:/join-form";
+        return "redirect:/login-form";
     }
 
 
@@ -38,10 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(
-            UserRequest.LoginDTO loginDTO,
-            HttpServletResponse response) {
-        System.out.println(loginDTO);
+    public String login(UserRequest.LoginDTO loginDTO, HttpServletResponse response) {
         User sessionUser = userService.로그인(loginDTO);
         session.setAttribute("sessionUser", sessionUser);
 
@@ -55,7 +51,7 @@ public class UserController {
             response.addCookie(cookie);
         }
 
-        return "redirect:/login-form";
+        return "redirect:/";
     }
 
     @GetMapping("/logout")
@@ -67,7 +63,6 @@ public class UserController {
     @GetMapping("/check-username-available/{username}")
     public @ResponseBody Resp<?> checkUsernameAvailable(@PathVariable("username") String username) {
         Map<String, Object> dto = userService.유저네임중복체크(username);
-
         return Resp.ok(dto);
     }
 }

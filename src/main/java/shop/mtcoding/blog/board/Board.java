@@ -21,7 +21,7 @@ public class Board {
     private String content;
     private Boolean isPublic;
 
-    @ManyToOne(fetch = FetchType.EAGER) // 연관관계 설정
+    @ManyToOne(fetch = FetchType.LAZY) // 연관관계 설정 -> ORM 하려고
     private User user;
 
     @CreationTimestamp
