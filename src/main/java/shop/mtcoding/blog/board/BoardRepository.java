@@ -20,7 +20,7 @@ public class BoardRepository {
         String s1 = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
         String s2 = "select b from Board b where b.isPublic = true order by b.id desc";
 
-        Query query = null;
+        Query query;
         if (userId == null) {
             query = em.createQuery(s2, Board.class);
         } else {

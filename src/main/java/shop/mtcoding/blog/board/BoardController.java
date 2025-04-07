@@ -54,7 +54,9 @@ public class BoardController {
     public String board(@PathVariable Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        BoardResponse.DetailDTO detailDTO = boardService.상세보기(id, sessionUser.getId());
+        Integer sessionUserId = sessionUser == null ? null : sessionUser.getId();
+
+        BoardResponse.DetailDTO detailDTO = boardService.상세보기(id, sessionUserId);
 
         request.setAttribute("model", detailDTO);
 
