@@ -19,6 +19,7 @@ public class BoardController {
     @GetMapping("/")
     public String list(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
+
         if (sessionUser == null) {
             List<Board> boardList = boardService.목록보기(null);
             request.setAttribute("models", boardList);
@@ -26,21 +27,25 @@ public class BoardController {
             List<Board> boardList = boardService.목록보기(sessionUser.getId());
             request.setAttribute("models", boardList);
         }
-        return "/board/list";
+
+        return "board/list";
     }
 
     @GetMapping("/board/save-form")
     public String saveForm() {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
-        return "/board/save-form";
+
+        return "board/save-form";
     }
 
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO saveDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
+
         boardService.글쓰기(saveDTO, sessionUser);
+
         return "redirect:/";
     }
 }

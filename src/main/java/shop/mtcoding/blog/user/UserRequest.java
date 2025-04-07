@@ -11,7 +11,7 @@ public class UserRequest {
         private String password;
         private String email;
 
-        // dto에 있는 데이터를 바로 Entity 객체로 변환 하는 메서드
+        // dto에 있는 데이터를 바로 Entity 객체로 변환 하는 메서드 insert에 필요함
         public User toEntity() {
             return User.builder()
                     .username(username)
@@ -26,5 +26,11 @@ public class UserRequest {
         private String username;
         private String password;
         private String rememberMe;
+    }
+
+    @Data
+    public static class UpdateDTO {
+        private String password;
+        private String email;
     }
 }

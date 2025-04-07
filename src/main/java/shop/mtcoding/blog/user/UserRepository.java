@@ -32,4 +32,8 @@ public class UserRepository {
             return null;
         }
     }
+
+    public User findByUserId(Integer userId) {
+        return em.find(User.class, userId);
+    }
 }

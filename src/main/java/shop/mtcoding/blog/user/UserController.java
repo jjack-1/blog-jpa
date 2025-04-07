@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/join-form")
     public String joinForm() {
-        return "/user/join-form";
+        return "user/join-form";
     }
 
     @PostMapping("/join")
@@ -30,10 +30,9 @@ public class UserController {
         return "redirect:/login-form";
     }
 
-
     @GetMapping("/login-form")
     public String loginForm() {
-        return "/user/login-form";
+        return "user/login-form";
     }
 
     @PostMapping("/login")
@@ -64,5 +63,26 @@ public class UserController {
     public @ResponseBody Resp<?> checkUsernameAvailable(@PathVariable("username") String username) {
         Map<String, Object> dto = userService.유저네임중복체크(username);
         return Resp.ok(dto);
+    }
+
+    @GetMapping("/user/update-form")
+    public String updateForm() {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
+
+        return "user/update-form"; // view resolver -> prefix 로 templates/가 되어 있다. subfix 로 .mustache가 되어 있다
+    }
+
+    @PostMapping("/user/update")
+    public String update(UserRequest.UpdateDTO updateDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
+
+        User user = userService.회원정보수정(updateDTO, sessionUser.getId());
+
+        // 세션 동기화
+        session.setAttribute("sessionUser", user);
+
+        return "redirect:/";
     }
 }
