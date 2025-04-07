@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.user.User;
 
@@ -47,5 +48,16 @@ public class BoardController {
         boardService.글쓰기(saveDTO, sessionUser);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/board/{id}")
+    public String board(@PathVariable Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        BoardResponse.DetailDTO detailDTO = boardService.상세보기(id, sessionUser.getId());
+
+        request.setAttribute("model", detailDTO);
+
+        return "board/detail";
     }
 }

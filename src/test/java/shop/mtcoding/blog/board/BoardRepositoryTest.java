@@ -31,4 +31,16 @@ public class BoardRepositoryTest {
         System.out.println("--------------------");
         // eye
     }
+
+    @Test
+    public void findByIdWithUser_test() {
+        //given
+        Integer boardId = 1;
+
+        // when
+        Board board = boardRepository.findByIdWithUser(boardId);
+
+        // eye
+        System.out.println(board);
+    }
 }
