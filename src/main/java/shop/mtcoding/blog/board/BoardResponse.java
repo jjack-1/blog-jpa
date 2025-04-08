@@ -19,6 +19,6 @@ public class BoardResponse {
         private String username;
         private Timestamp createdAt;
         private Boolean isLove;
-        private Integer loveCount;
+        private Long loveCount;
     }
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
@@ -43,48 +42,25 @@ public class BoardRepository {
     }
 
     public BoardResponse.DetailDTO findDetail(Integer id, Integer sessionUserId) {
-        Query query = em.createNativeQuery("""
-                    SELECT
-                        bt.id,
-                        bt.title,
-                        bt.content,
-                        bt.is_public,
-                        CASE
-                            WHEN bt.user_id = ? THEN true
-                            ELSE false
-                        END AS is_owner,
-                        ut.username,
-                        bt.created_at,
-                        CASE
-                            WHEN MAX(CASE WHEN lt.user_id = ? THEN 1 ELSE 0 END) = 1
-                            THEN true
-                            ELSE false
-                        END AS is_love,
-                        COUNT(lt.id) AS love_count
-                    FROM board_tb bt
-                    INNER JOIN user_tb ut
-                        ON bt.user_id = ut.id
-                    LEFT OUTER JOIN love_tb lt
-                        ON bt.id = lt.board_id
-                    WHERE bt.id = ?
-                    GROUP BY bt.id;
+        Query query = em.createQuery("""
+                        SELECT new shop.mtcoding.blog.board.BoardResponse$DetailDTO(
+                            b.id,
+                            b.title,
+                            b.content,
+                            b.isPublic,
+                            CASE WHEN b.user.id = :userId THEN true ELSE false END,
+                            b.user.username,
+                            b.createdAt,
+                            CASE WHEN MAX(CASE WHEN l.user.id = :userId THEN 1 ELSE 0 END) = 1 THEN true ELSE false END,
+                            COUNT(l.id)
+                        )
+                        FROM Board b
+                        LEFT JOIN Love l on b.id = l.board.id
+                        WHERE b.id = :boardId
+                        GROUP BY b.id, b.title, b.content, b.isPublic, b.user.id, b.user.username, b.createdAt
                 """);
-        query.setParameter(1, sessionUserId);
-        query.setParameter(2, sessionUserId);
-        query.setParameter(3, id);
-
-        Object[] objects = (Object[]) query.getSingleResult();
-
-        return new BoardResponse.DetailDTO(
-                (Integer) objects[0],
-                (String) objects[1],
-                (String) objects[2],
-                (Boolean) objects[3],
-                (Boolean) objects[4],
-                (String) objects[5],
-                (Timestamp) objects[6],
-                (Boolean) objects[7],
-                ((Long) objects[8]).intValue()
-        );
+        query.setParameter("boardId", id);
+        query.setParameter("userId", sessionUserId);
+        return (BoardResponse.DetailDTO) query.getSingleResult();
     }
 }
