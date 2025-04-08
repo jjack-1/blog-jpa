@@ -78,10 +78,10 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
 
-        User user = userService.회원정보수정(updateDTO, sessionUser.getId());
+        User userPS = userService.회원정보수정(updateDTO, sessionUser.getId());
 
         // 세션 동기화
-        session.setAttribute("sessionUser", user);
+        session.setAttribute("sessionUser", userPS);
 
         return "redirect:/";
     }

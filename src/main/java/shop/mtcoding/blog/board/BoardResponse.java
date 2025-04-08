@@ -16,8 +16,10 @@ public class BoardResponse {
         private Boolean isOwner;
         private String username;
         private Timestamp createdAt;
+        private Boolean isLove;
+        private Integer loveCount;
 
-        public DetailDTO(Board board, Integer sessionUserId) {
+        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount) {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
@@ -25,6 +27,8 @@ public class BoardResponse {
             this.isOwner = board.getUser().getId() == sessionUserId;
             this.username = board.getUser().getUsername();
             this.createdAt = board.getCreatedAt();
+            this.isLove = isLove;
+            this.loveCount = loveCount;
         }
     }
 }

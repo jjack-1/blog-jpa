@@ -40,7 +40,7 @@ public class BoardRepository {
     // left outer join -> left join
     // fk자리에는 Board에 있는 User객체를 넣어줘야 한다
     // fetch 를 작성해야 b 라고만 적었을 때 user 정보도 같이 프로젝션해서 보여준다
-    public Board findByIdWithUser(Integer id) {
+    public Board findByIdJoinUser(Integer id) {
         Query query = em.createQuery("select b from Board b join fetch b.user u where b.id = :id", Board.class);
         query.setParameter("id", id);
         return (Board) query.getSingleResult();
