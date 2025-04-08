@@ -5,8 +5,6 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 @RequiredArgsConstructor
 public class LoveRepository {
@@ -24,9 +22,11 @@ public class LoveRepository {
         }
     }
 
-    public List<Love> findByBoardId(Integer boardId) {
-        Query query = em.createQuery("select lo from Love lo where lo.board.id = :boardId", Love.class);
+    // 게시글에 대한 좋아요 숫자만 return
+    public Long findByBoardIdCount(Integer boardId) {
+        Query query = em.createQuery("select count(lo) from Love lo where lo.board.id = :boardId");
         query.setParameter("boardId", boardId);
-        return query.getResultList();
+
+        return (Long) query.getSingleResult();
     }
 }

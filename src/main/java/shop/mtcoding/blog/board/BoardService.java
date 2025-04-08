@@ -28,13 +28,11 @@ public class BoardService {
     public BoardResponse.DetailDTO 상세보기(Integer id, Integer sessionUserId) {
         Board board = boardRepository.findByIdJoinUser(id);
         Love love = loveRepository.findByUserIdAndBoardId(sessionUserId, id);
-        List<Love> loves = loveRepository.findByBoardId(id);
+        Long loveCount = loveRepository.findByBoardIdCount(id);
 
         Boolean isLove = love == null ? false : true;
 
-        Integer loveCount = loves.size();
-
-        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, sessionUserId, isLove, loveCount);
+        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, sessionUserId, isLove, loveCount.intValue());
 
         return detailDTO;
     }
