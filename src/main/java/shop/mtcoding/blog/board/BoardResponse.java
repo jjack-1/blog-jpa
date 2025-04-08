@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.board;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -8,6 +9,7 @@ public class BoardResponse {
 
     // 상세보기 화면에 필요한 데이터
     @Data
+    @AllArgsConstructor
     public static class DetailDTO {
         private Integer id;
         private String title;
@@ -18,17 +20,5 @@ public class BoardResponse {
         private Timestamp createdAt;
         private Boolean isLove;
         private Integer loveCount;
-
-        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount) {
-            this.id = board.getId();
-            this.title = board.getTitle();
-            this.content = board.getContent();
-            this.isPublic = board.getIsPublic();
-            this.isOwner = board.getUser().getId() == sessionUserId;
-            this.username = board.getUser().getUsername();
-            this.createdAt = board.getCreatedAt();
-            this.isLove = isLove;
-            this.loveCount = loveCount;
-        }
     }
 }

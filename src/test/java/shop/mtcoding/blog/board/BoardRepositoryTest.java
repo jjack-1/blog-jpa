@@ -5,42 +5,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.util.List;
-
 @Import(BoardRepository.class) // BoardRepository
 @DataJpaTest // EntityManager, PC
 public class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Test
-    public void findAll_test() {
-        // given
-        Integer userId = 1;
-
-        // when
-        List<Board> boardList = boardRepository.findAll(userId);
-
-        // Lazy -> Board -> User(id=1)
-        // Eager -> N+1  -> Board조회 -> 연관된 User 유저 수 만큼 주회
-        // Eager -> Join -> 한방쿼리
-        System.out.println("--------------------");
-        boardList.forEach((board) -> {
-            System.out.println(board.getId() + ": " + board.getTitle());
-        });
-        System.out.println("--------------------");
-        // eye
-    }
 
     @Test
-    public void findByIdWithUser_test() {
+    public void findDetail_test() {
         //given
-        Integer boardId = 1;
+        Integer id = 4;
+        Integer sessionUserId = 1;
 
         // when
-        Board board = boardRepository.findByIdWithUser(boardId);
+        Object[] objects = boardRepository.findDetail(id, sessionUserId);
 
         // eye
-        System.out.println(board);
+        for (Object object : objects) {
+            System.out.println(object);
+        }
     }
 }
