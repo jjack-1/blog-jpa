@@ -31,8 +31,9 @@ public class BoardService {
         Long loveCount = loveRepository.findByBoardIdCount(id);
 
         Boolean isLove = love == null ? false : true;
+        Integer loveId = love == null ? null : love.getId();
 
-        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, sessionUserId, isLove, loveCount.intValue());
+        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, sessionUserId, isLove, loveCount.intValue(), loveId);
 
         return detailDTO;
     }

@@ -29,4 +29,8 @@ public class LoveRepository {
 
         return (Long) query.getSingleResult();
     }
+
+    public void save(Love love) {
+        em.persist(love);
+    }
 }

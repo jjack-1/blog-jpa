@@ -18,8 +18,9 @@ public class BoardResponse {
         private Timestamp createdAt;
         private Boolean isLove;
         private Integer loveCount;
+        private Integer loveId;
 
-        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount) {
+        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount, Integer loveId) {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
@@ -29,6 +30,7 @@ public class BoardResponse {
             this.createdAt = board.getCreatedAt();
             this.isLove = isLove;
             this.loveCount = loveCount;
+            this.loveId = loveId;
         }
     }
 }
