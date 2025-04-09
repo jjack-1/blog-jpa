@@ -16,6 +16,7 @@ public class LoveController {
     public Resp<?> saveLove(@RequestBody LoveRequest.SaveDTO reqDTO) { // reqDTO -> 컨벤션 약속
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
+        
         LoveResponse.SaveDTO respDTO = loveService.좋아요(reqDTO, sessionUser.getId());
 
         return Resp.ok(respDTO);
