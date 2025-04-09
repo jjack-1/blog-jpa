@@ -30,7 +30,8 @@ public class LoveRepository {
         return (Long) query.getSingleResult();
     }
 
-    public void save(Love love) {
+    public Integer save(Love love) {
         em.persist(love);
+        return love.getId();
     }
 }
