@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.love.Love;
 import shop.mtcoding.blog.love.LoveRepository;
-import shop.mtcoding.blog.reply.Reply;
 import shop.mtcoding.blog.reply.ReplyRepository;
 import shop.mtcoding.blog.user.User;
 
@@ -29,15 +28,14 @@ public class BoardService {
     }
 
     public BoardResponse.DetailDTO 상세보기(Integer id, Integer sessionUserId) {
-        Board board = boardRepository.findByIdJoinUser(id); // board 조회
+        Board board = boardRepository.findByIdJoinUserAndReplies(id); // board 조회
         Love love = loveRepository.findByUserIdAndBoardId(sessionUserId, id); // board에 대한 love 조회
         Long loveCount = loveRepository.findByBoardIdCount(id); // board에 대한 love 개수 조회
-        List<Reply> replies = replyRepository.findAllByBoardId(id); // board에 대한 reply 테이블 조회
 
         Boolean isLove = love == null ? false : true;
         Integer loveId = love == null ? null : love.getId();
 
-        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, sessionUserId, isLove, loveCount.intValue(), loveId, replies);
+        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, sessionUserId, isLove, loveCount.intValue(), loveId);
 
         return detailDTO;
     }

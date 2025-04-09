@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import shop.mtcoding.blog.reply.Reply;
 
 import java.util.List;
 
@@ -38,9 +39,31 @@ public class BoardRepositoryTest {
         Integer boardId = 1;
 
         // when
-        Board board = boardRepository.findByIdWithUser(boardId);
+        Board board = boardRepository.findByIdJoinUser(boardId);
 
         // eye
         System.out.println(board);
+    }
+
+    @Test
+    public void findById_test() {
+        // given
+        Integer boardId = 4;
+        Board board = boardRepository.findById(boardId);
+    }
+
+    @Test
+    public void findByIdJoinUserAndReplies_test() {
+        // given
+        Integer boardId = 4;
+        Board board = boardRepository.findByIdJoinUserAndReplies(boardId);
+
+
+        for (Reply reply : board.getReplies()) {
+            System.out.println("-----------------------------------Lazy Loading Select");
+            System.out.println(reply.getUser().getUsername());
+            System.out.println("------------------------");
+        }
+
     }
 }
