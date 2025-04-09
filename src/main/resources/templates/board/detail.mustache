@@ -1,4 +1,7 @@
 {{> layout/header}}
+
+<input type="hidden" id="boardId" value="{{model.id}}"/>
+
 <div class="container p-5">
 
 	<!-- 수정삭제버튼 -->
@@ -27,14 +30,14 @@
 	<!-- AJAX 좋아요 영역 -->
 	<div class="my-3 d-flex align-items-center">
 		{{#model.isLove}}
-			<i id="likeIcon" data-liked="true" class="fa fa-heart" style="font-size:20px; color:red"
+			<i id="loveIcon" class="fa fa-heart" style="font-size:20px; color:red"
 			   onclick="deleteLove({{model.loveId}})"></i>
 		{{/model.isLove}}
 		{{^model.isLove}}
-			<i id="likeIcon" data-liked="false" class="fa fa-heart" style="font-size:20px; color:black"
-			   onclick="saveLove({{model.id}})"></i>
+			<i id="loveIcon" class="fa fa-heart" style="font-size:20px; color:black"
+			   onclick="saveLove()"></i>
 		{{/model.isLove}}
-		<span class="ms-1"><b id="likeCount">{{model.loveCount}}</b>명이 이 글을 좋아합니다</span>
+		<span class="ms-1"><b id="loveCount">{{model.loveCount}}</b>명이 이 글을 좋아합니다</span>
 	</div>
 
 	<!-- 댓글 -->
@@ -79,42 +82,42 @@
 </div>
 
 <script>
-	let liked = document.querySelector("#likeIcon").dataset.liked;
+	let boardId = document.querySelector("#boardId").value;
 
-	async function saveLove(boardId) {
-		let requestBody = {
-			boardId: boardId
-		}
+	// setInterval(() => {  <- 크론 또는 polling 이라 한다
+	// 	location.reload();
+	// }, 1000);
+
+	async function saveLove() {
+		let requestBody = {boardId: boardId};
 		let response = await fetch(`/love`, {
-			method: "post",
+			method: "POST",
 			body: JSON.stringify(requestBody),
 			headers: {"Content-Type": "application/json"}
 		});
-		// let responseBody = await response.json(); // loveCount, loveId
+		let responseBody = await response.json();
 
-		//likeToggle();
-		// location.reload();
+		// DOM 업데이트
+		let loveIcon = document.querySelector('#loveIcon');
+		let loveCount = document.querySelector('#loveCount');
+		loveIcon.style.color = 'red';
+		loveIcon.setAttribute('onclick', `deleteLove(${responseBody.body.loveId})`);
+		loveCount.innerHTML = responseBody.body.loveCount;
 	}
 
 	async function deleteLove(loveId) {
 		let response = await fetch(`/love/${loveId}`, {
-			method: "delete"
+			method: "DELETE"
 		});
-		let responseBody = await response.json(); // loveCount 응답 받아야 함
+		let responseBody = await response.json(); // response.text() -> html or text를 받으면 사용;
+		console.log(responseBody);
 
-		//likeToggle();
-		location.reload();
-	}
-
-	// 빨간색 하트, 검정색 하트
-	function likeToggle() {
-		let icon = document.querySelector('#likeIcon');
-		liked = !liked;
-		if (liked) {
-			icon.style.color = 'red';
-		} else {
-			icon.style.color = 'black';
-		}
+		// DOM 업데이트
+		let loveIcon = document.querySelector('#loveIcon');
+		let loveCount = document.querySelector('#loveCount');
+		loveIcon.style.color = 'black';
+		loveIcon.setAttribute('onclick', `saveLove()`);
+		loveCount.innerHTML = responseBody.body.loveCount;
 	}
 </script>
 

@@ -1,14 +1,26 @@
 package shop.mtcoding.blog.love;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 public class LoveResponse {
 
     @Data
-    @AllArgsConstructor
     public static class SaveDTO {
         private Integer loveId;
-        private Long loveCount;
+        private Integer loveCount;
+
+        public SaveDTO(Integer loveId, Integer loveCount) {
+            this.loveId = loveId;
+            this.loveCount = loveCount;
+        }
+    }
+
+    @Data
+    public static class DeleteDTO {
+        private Integer loveCount;
+
+        public DeleteDTO(Integer loveCount) {
+            this.loveCount = loveCount;
+        }
     }
 }
