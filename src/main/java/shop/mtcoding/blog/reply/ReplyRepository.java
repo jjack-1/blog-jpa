@@ -18,4 +18,18 @@ public class ReplyRepository {
 
         return query.getResultList();
     }
+
+    public void save(Reply reply) {
+        em.persist(reply);
+    }
+
+    public void delete(Integer id) {
+        Query query = em.createQuery("delete from Reply r where r.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    public Reply findById(Integer id) {
+        return em.find(Reply.class, id);
+    }
 }

@@ -47,7 +47,7 @@ public class BoardRepository {
     }
 
     public Board findByIdJoinUserAndReplies(Integer id) {
-        Query query = em.createQuery("select b from Board b join fetch b.user u left join fetch b.replies r join fetch r.user where b.id = :id", Board.class);
+        Query query = em.createQuery("select b from Board b join fetch b.user u left join fetch b.replies r left join fetch r.user where b.id = :id order by r.id desc", Board.class);
         query.setParameter("id", id);
         return (Board) query.getSingleResult();
     }

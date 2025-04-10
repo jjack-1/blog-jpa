@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import shop.mtcoding.blog.user.User;
 
 import java.util.List;
@@ -50,8 +51,21 @@ public class BoardController {
         return "redirect:/";
     }
 
+    @GetMapping("/v2/board/{id}")
+    public @ResponseBody BoardResponse.DetailDTO v2Detail(@PathVariable Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        Integer sessionUserId = 1;
+
+        BoardResponse.DetailDTO detailDTO = boardService.상세보기(id, sessionUserId);
+
+        request.setAttribute("model", detailDTO);
+
+        return detailDTO;
+    }
+
     @GetMapping("/board/{id}")
-    public String board(@PathVariable Integer id, HttpServletRequest request) {
+    public String detail(@PathVariable Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         Integer sessionUserId = sessionUser == null ? null : sessionUser.getId();

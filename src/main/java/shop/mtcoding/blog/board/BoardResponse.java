@@ -4,6 +4,7 @@ import lombok.Data;
 import shop.mtcoding.blog.reply.Reply;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardResponse {
@@ -21,7 +22,22 @@ public class BoardResponse {
         private Boolean isLove;
         private Integer loveCount;
         private Integer loveId;
-        private List<Reply> replies;
+        private List<ReplyDTO> replies;
+
+        @Data
+        public class ReplyDTO {
+            private Integer id;
+            private String username;
+            private Boolean isOwner;
+            private String content;
+
+            public ReplyDTO(Reply reply, Integer sessionUserId) {
+                this.id = reply.getId();
+                this.username = reply.getUser().getUsername();
+                this.isOwner = reply.getUser().getId().equals(sessionUserId); // 이 변수가 필요해서 DTO를 만듬
+                this.content = reply.getContent();
+            }
+        }
 
         public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount, Integer loveId) {
             this.id = board.getId();
@@ -34,7 +50,14 @@ public class BoardResponse {
             this.isLove = isLove;
             this.loveCount = loveCount;
             this.loveId = loveId;
-            this.replies = board.getReplies();
+
+            List<ReplyDTO> replyDTOS = new ArrayList<>();
+
+            for (Reply reply : board.getReplies()) {
+                replyDTOS.add(new ReplyDTO(reply, sessionUserId));
+            }
+
+            this.replies = replyDTOS;
         }
     }
 }
