@@ -3,6 +3,8 @@ package shop.mtcoding.blog.reply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog._core.error.ex.Exception403;
+import shop.mtcoding.blog._core.error.ex.Exception404;
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +19,10 @@ public class ReplyService {
     @Transactional
     public Integer 댓글삭제(Integer id, Integer sessionUserId) {
         Reply replyPS = replyRepository.findById(id);
-        if (replyPS == null) throw new RuntimeException("해당 댓글이 없습니다");
 
-        if (!(replyPS.getUser().getId().equals(sessionUserId))) throw new RuntimeException("니가 작성한 댓글이 아니다");
+        if (replyPS == null) throw new Exception404("해당 댓글이 없습니다");
+
+        if (!(replyPS.getUser().getId().equals(sessionUserId))) throw new Exception403("권한이 없습니다");
 
         replyRepository.deleteById(id); // 삭제 쿼리를 날리기만 한다
 

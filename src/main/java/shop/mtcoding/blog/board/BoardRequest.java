@@ -10,7 +10,7 @@ public class BoardRequest {
         private String title;
         private String content;
         private String isPublic;
-        
+
         public Board toEntity(User user) {
             return Board.builder()
                     .title(title)
@@ -19,5 +19,12 @@ public class BoardRequest {
                     .user(user) // user 객체 필요
                     .build();
         }
+    }
+
+    @Data
+    public static class UpdateDTO {
+        private String title;
+        private String content;
+        private String isPublic;
     }
 }

@@ -3,6 +3,9 @@ package shop.mtcoding.blog.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog._core.error.ex.Exception400;
+import shop.mtcoding.blog._core.error.ex.Exception401;
+import shop.mtcoding.blog._core.error.ex.Exception404;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +27,7 @@ public class UserService {
 
         // 2. 사용 중이면 예외!
         if (alreadyUser != null) {
-            throw new RuntimeException("해당 username은 이미 사용중 입니다");
+            throw new Exception400("해당 username은 이미 사용중 입니다");
         }
 
         // 3. 아니면 회원가입 성공
@@ -37,17 +40,18 @@ public class UserService {
 
         // 2. 없으면 예외!
         if (user == null) {
-            throw new RuntimeException("해당 아이디가 없습니다");
+            throw new Exception401("username 혹은 password가 맞지 않습니다");
         }
 
         // 3. 있으면 password 비교
         if (!(user.getPassword().equals(loginDTO.getPassword()))) {
-            throw new RuntimeException("password가 맞지 않습니다");
+            throw new Exception401("username 혹은 password가 맞지 않습니다");
         }
 
         return user;
     }
 
+    // 매우 단순한 {isSameUsername:true} -> 이런 데이터는 map 으로 만들어 리턴한다
     public Map<String, Object> 유저네임중복체크(String username) {
         User user = userRepository.findByUsername(username);
         Map<String, Object> dto = new HashMap<>();
@@ -65,7 +69,7 @@ public class UserService {
     public User 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
         User userPS = userRepository.findByUserId(userId);
 
-        if (userPS == null) throw new RuntimeException("회원을 찾을 수 없습니다");
+        if (userPS == null) throw new Exception404("회원을 찾을 수 없습니다");
 
         userPS.update(updateDTO.getPassword(), updateDTO.getEmail()); // 영속화 된 객체(db에서 조회한 것)의 상태변경
 

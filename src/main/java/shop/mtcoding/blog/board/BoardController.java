@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import shop.mtcoding.blog._core.error.ex.Exception401;
 import shop.mtcoding.blog.user.User;
 
 import java.util.List;
@@ -36,23 +37,23 @@ public class BoardController {
     @GetMapping("/board/save-form")
     public String saveForm() {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다");
 
         return "board/save-form";
     }
 
     @PostMapping("/board/save")
-    public String save(BoardRequest.SaveDTO saveDTO) {
+    public String save(BoardRequest.SaveDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다");
 
-        boardService.글쓰기(saveDTO, sessionUser);
+        boardService.글쓰기(reqDTO, sessionUser);
 
         return "redirect:/";
     }
 
     @GetMapping("/v2/board/{id}")
-    public @ResponseBody BoardResponse.DetailDTO v2Detail(@PathVariable Integer id, HttpServletRequest request) {
+    public @ResponseBody BoardResponse.DetailDTO v2Detail(@PathVariable("id") Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         Integer sessionUserId = 1;
@@ -65,7 +66,7 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
+    public String detail(@PathVariable("id") Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         Integer sessionUserId = sessionUser == null ? null : sessionUser.getId();

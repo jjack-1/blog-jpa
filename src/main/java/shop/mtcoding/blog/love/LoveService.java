@@ -3,6 +3,8 @@ package shop.mtcoding.blog.love;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog._core.error.ex.ExceptionApi403;
+import shop.mtcoding.blog._core.error.ex.ExceptionApi404;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +21,10 @@ public class LoveService {
     @Transactional
     public LoveResponse.DeleteDTO 좋아요취소(Integer id, Integer sessionUserId) {
         Love lovePs = loveRepository.findById(id);
-        if (lovePs == null) throw new RuntimeException("좋아요가 없습니다");
 
-        if (!(lovePs.getUser().getId().equals(sessionUserId))) throw new RuntimeException("니가 만든 좋아요가 아니다");
+        if (lovePs == null) throw new ExceptionApi404("좋아요가 없습니다");
+
+        if (!(lovePs.getUser().getId().equals(sessionUserId))) throw new ExceptionApi403("권한이 없습니다");
 
         Integer boardId = lovePs.getBoard().getId();
         loveRepository.deleteById(id);

@@ -91,14 +91,17 @@
 			headers: {"Content-Type": "application/json"}
 		});
 		let responseBody = await response.json();
-		console.log(responseBody);
 
-		// DOM 업데이트
-		let loveIcon = document.querySelector('#loveIcon');
-		let loveCount = document.querySelector('#loveCount');
-		loveIcon.style.color = 'red';
-		loveIcon.setAttribute('onclick', `deleteLove(${responseBody.body.loveId})`);
-		loveCount.innerHTML = responseBody.body.loveCount;
+		if (responseBody.status != 200) {
+			alert(responseBody.msg)
+		} else {
+			// DOM 업데이트
+			let loveIcon = document.querySelector('#loveIcon');
+			let loveCount = document.querySelector('#loveCount');
+			loveIcon.style.color = 'red';
+			loveIcon.setAttribute('onclick', `deleteLove(${responseBody.body.loveId})`);
+			loveCount.innerHTML = responseBody.body.loveCount;
+		}
 	}
 
 	async function deleteLove(loveId) {
@@ -106,14 +109,17 @@
 			method: "DELETE"
 		});
 		let responseBody = await response.json(); // response.text() -> html or text를 받으면 사용;
-		console.log(responseBody);
-
-		// DOM 업데이트
-		let loveIcon = document.querySelector('#loveIcon');
-		let loveCount = document.querySelector('#loveCount');
-		loveIcon.style.color = 'black';
-		loveIcon.setAttribute('onclick', `saveLove()`);
-		loveCount.innerHTML = responseBody.body.loveCount;
+		
+		if (responseBody.status != 200) {
+			alert(responseBody.msg)
+		} else {
+			// DOM 업데이트
+			let loveIcon = document.querySelector('#loveIcon');
+			let loveCount = document.querySelector('#loveCount');
+			loveIcon.style.color = 'black';
+			loveIcon.setAttribute('onclick', `saveLove()`);
+			loveCount.innerHTML = responseBody.body.loveCount;
+		}
 	}
 </script>
 
