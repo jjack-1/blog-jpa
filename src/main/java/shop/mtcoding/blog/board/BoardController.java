@@ -77,4 +77,23 @@ public class BoardController {
 
         return "board/detail";
     }
+
+    @GetMapping("/board/{id}/update-form")
+    public String updateForm(@PathVariable("id") Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다");
+
+        Board board = boardService.수정상세보기(id);
+
+        request.setAttribute("model", board);
+
+        return "board/update-form";
+    }
+
+    @PostMapping("/board/{id}/update")
+    public String update(@PathVariable("id") Integer id, BoardRequest.UpdateDTO reqDTO) {
+        System.out.println(reqDTO);
+        boardService.글수정(id, reqDTO);
+        return "redirect:/board/" + id;
+    }
 }

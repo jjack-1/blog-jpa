@@ -46,4 +46,11 @@ public class Board {
         this.user = user;
         this.createdAt = createdAt;
     }
+
+    // 게시글 수정 setter
+    public void update(String title, String content, String isPublic) {
+        this.title = title;
+        this.content = content;
+        this.isPublic = "on".equals(isPublic);
+    }
 }
