@@ -67,7 +67,6 @@
 					</div>
 					{{#isOwner}}
 						<form action="/reply/{{id}}/delete" method="post">
-							<input name="boardId" type="hidden" value="{{model.id}}"/>
 							<button class="btn">🗑</button>
 						</form>
 					{{/isOwner}}

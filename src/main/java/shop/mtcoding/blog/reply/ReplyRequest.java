@@ -19,9 +19,4 @@ public class ReplyRequest {
                     .build();
         }
     }
-
-    @Data
-    public static class DeleteDTO {
-        private Integer boardId;
-    }
 }

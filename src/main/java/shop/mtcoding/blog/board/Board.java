@@ -37,7 +37,7 @@ public class Board {
     @CreationTimestamp
     private Timestamp createdAt;
 
-    @Builder
+    @Builder // 빌더 어노테이션은 컬렉션을 지원하지 않는다
     public Board(Integer id, String title, String content, Boolean isPublic, User user, Timestamp createdAt) {
         this.id = id;
         this.title = title;
