@@ -85,7 +85,7 @@
 
 	async function saveLove() {
 		let requestBody = {boardId: boardId};
-		let response = await fetch(`/love`, {
+		let response = await fetch(`/api/love`, {
 			method: "POST",
 			body: JSON.stringify(requestBody),
 			headers: {"Content-Type": "application/json"}
@@ -105,11 +105,11 @@
 	}
 
 	async function deleteLove(loveId) {
-		let response = await fetch(`/love/${loveId}`, {
+		let response = await fetch(`/api/love/${loveId}`, {
 			method: "DELETE"
 		});
 		let responseBody = await response.json(); // response.text() -> html or text를 받으면 사용;
-		
+
 		if (responseBody.status != 200) {
 			alert(responseBody.msg)
 		} else {
