@@ -3,6 +3,7 @@ package shop.mtcoding.blog.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog._core.error.ex.Exception403;
 import shop.mtcoding.blog._core.error.ex.Exception404;
 import shop.mtcoding.blog.love.Love;
 import shop.mtcoding.blog.love.LoveRepository;
@@ -41,23 +42,35 @@ public class BoardService {
         return detailDTO;
     }
 
-    public Board 수정상세보기(Integer id) {
+    public Board 수정상세보기(Integer id, Integer sessionUserId) {
         Board boardPS = boardRepository.findById(id);
+
         if (boardPS == null) throw new Exception404("해당 게시글이 없습니다");
+
+        if (!(boardPS.getUser().getId().equals(sessionUserId))) throw new Exception403("권한이 없습니다");
+
         return boardPS;
     }
 
     // TODO
     @Transactional
-    public void 글수정(Integer id, BoardRequest.UpdateDTO updateDTO) {
+    public void 글수정(Integer id, BoardRequest.UpdateDTO updateDTO, Integer sessionUserId) {
         Board boardPS = boardRepository.findById(id);
 
         if (boardPS == null) throw new Exception404("해당 게시글이 없습니다");
+
+        if (!(boardPS.getUser().getId().equals(sessionUserId))) throw new Exception403("권한이 없습니다");
 
         boardPS.update(updateDTO.getTitle(), updateDTO.getContent(), updateDTO.getIsPublic());
     } // PS객체를 수정하는 방법 -> 더티체킹
 
     // TODO
-    public void 글삭제() {
+    @Transactional
+    public void 글삭제(Integer id) {
+        Board boardPS = boardRepository.findById(id);
+
+        if (boardPS == null) throw new Exception404("해당 게시글이 없습니다");
+
+        boardRepository.deleteById(id);
     }
 }
