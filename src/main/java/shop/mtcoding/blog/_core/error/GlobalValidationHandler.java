@@ -9,7 +9,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Component // Ioc에 추가
-@Aspect // 이 어노테이션이 붙어야 proxy로 동작함    aop
+@Aspect // 이 어노테이션이 붙어야 proxy로 동작함    aop ?
 public class GlobalValidationHandler {
     @Before("@annotation(shop.mtcoding.blog._core.error.anno.MyBefore)")
     // 인터셉터는 invoke 밖에 있어서 req, resp 에만 접근 가능하지만. 이 어노테이션은 Component이기 때문에 리플렉션이 작동함
