@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import shop.mtcoding.blog._core.error.anno.MyAfter;
+import shop.mtcoding.blog._core.error.anno.MyAround;
+import shop.mtcoding.blog._core.error.anno.MyBefore;
 import shop.mtcoding.blog._core.error.ex.Exception400;
 import shop.mtcoding.blog._core.util.Resp;
 
@@ -24,11 +27,20 @@ public class UserController {
     private final UserService userService;
     private final HttpSession session;
 
+    @MyAround
+    @GetMapping("/v2/around")
+    public @ResponseBody String around() {
+        return "around";
+    }
+
+    @MyBefore
     @GetMapping("/join-form")
     public String joinForm() {
+        System.out.println("join-form 호출됨");
         return "user/join-form";
     }
 
+    @MyAfter
     @PostMapping("/join")
     public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors) { // @Valid <- 어노테이션이 있어야 DTO 오브젝트 내부의 @검증 어노테이션이 실행됨, 검증 문제가 생기면 Errors 로 넘겨준다. 이제 DTO의 책임은 유효성 검사다. @Valid 어노테이션 바로 뒤에 Errors를 붙여야 동작한다
 /*
@@ -41,6 +53,7 @@ public class UserController {
         if (!r2) throw new Exception400("패스워드는 6-20자이며, 특수문자,영어 대문자,소문자, 숫자가 포함되어야 하며, 공백이 있을 수 없습니다");
         if (!r3) throw new Exception400("이메일 형식에 맞게 적어주세요");
 */
+        System.out.println("join 호출됨");
         if (errors.hasErrors()) {
             List<FieldError> fErrors = errors.getFieldErrors();
             for (FieldError fError : fErrors) {
