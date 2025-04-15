@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
         String html = """
                 <script>
                     alert('${msg}');
+                    history.back();
                 </script>
                 """.replace("${msg}", e.getMessage());
         return html; // 브라우저는 html text를 받으면 해석한다
