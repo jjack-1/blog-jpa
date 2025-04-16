@@ -25,8 +25,16 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public List<Board> 목록보기(Integer userId) {
-        return boardRepository.findAll(userId);
+    public BoardResponse.DTO 목록보기(Integer userId, Integer page) {
+        if (userId == null) {
+//            return boardRepository.findAll(page);
+            List<Board> boards = boardRepository.findAll(page);
+            return new BoardResponse.DTO(boards, page + 1, page - 1);
+        } else {
+//            return boardRepository.findAll(userId, page);
+            List<Board> boards = boardRepository.findAll(userId, page);
+            return new BoardResponse.DTO(boards, page + 1, page - 1);
+        }
     }
 
     public BoardResponse.DetailDTO 상세보기(Integer id, Integer sessionUserId) {

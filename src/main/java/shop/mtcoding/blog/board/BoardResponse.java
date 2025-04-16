@@ -60,4 +60,19 @@ public class BoardResponse {
             this.replies = replyDTOS;
         }
     }
+
+    @Data
+    public static class DTO {
+        private List<Board> boards;
+        private Integer next;
+        private Integer prev;
+        private Boolean isFirst;
+        private Boolean isLast;
+
+        public DTO(List<Board> boards, Integer next, Integer prev) {
+            this.boards = boards;
+            this.next = next;
+            this.prev = prev;
+        }
+    }
 }
