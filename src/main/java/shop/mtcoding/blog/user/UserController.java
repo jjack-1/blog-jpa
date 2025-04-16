@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import shop.mtcoding.blog._core.error.ex.Exception400;
 import shop.mtcoding.blog._core.util.Resp;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,8 +29,12 @@ public class UserController {
     }
 
     @PostMapping("/join")
+<<<<<<< HEAD
     public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors) { // @Valid <- 어노테이션이 있어야 DTO 오브젝트 내부의 @검증 어노테이션이 실행됨, 검증 문제가 생기면 Errors 로 넘겨준다. 이제 DTO의 책임은 유효성 검사다. @Valid 어노테이션 바로 뒤에 Errors를 붙여야 동작한다
 /*
+=======
+    public String join(UserRequest.JoinDTO joinDTO) {
+>>>>>>> 3aa2670112926d1c94c6bf7a75ba756671197b7f
         // 유효성 검사
         boolean r1 = Pattern.matches("^[a-zA-Z0-9]{2,20}$", joinDTO.getUsername());
         boolean r2 = Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{6,20}$", joinDTO.getPassword());
@@ -37,8 +43,11 @@ public class UserController {
         if (!r1) throw new Exception400("유저네임은 2-20자이며, 영어와 숫자만 가능합니다");
         if (!r2) throw new Exception400("패스워드는 6-20자이며, 특수문자,영어 대문자,소문자, 숫자가 포함되어야 하며, 공백이 있을 수 없습니다");
         if (!r3) throw new Exception400("이메일 형식에 맞게 적어주세요");
+<<<<<<< HEAD
 */
 
+=======
+>>>>>>> 3aa2670112926d1c94c6bf7a75ba756671197b7f
         userService.회원가입(joinDTO);
         return "redirect:/login-form";
     }
