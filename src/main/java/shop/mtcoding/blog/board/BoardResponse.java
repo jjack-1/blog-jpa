@@ -64,15 +64,30 @@ public class BoardResponse {
     @Data
     public static class DTO {
         private List<Board> boards;
+        private Integer current;
         private Integer next;
         private Integer prev;
-        private Boolean isFirst;
-        private Boolean isLast;
+        private Integer totalCount;
+        private Integer size;
+        private Integer totalPages;
+        private Boolean isFirst; // currentPage를 알아야 한다
+        private Boolean isLast; // totalCount, size=3, totalPage를 알아야 한다
+        private List<Integer> numbers;
 
-        public DTO(List<Board> boards, Integer next, Integer prev) {
+        public DTO(List<Board> boards, Integer current, Integer totalCount) {
             this.boards = boards;
-            this.next = next;
-            this.prev = prev;
+            this.next = current + 1;
+            this.prev = current - 1;
+            this.totalCount = totalCount;
+            this.size = 3;
+            this.totalPages = makeTotalPages(totalCount, this.size);
+            this.isFirst = current == 0;
+            this.isLast = current == this.totalPages - 1;
+        }
+
+        private Integer makeTotalPages(int totalCount, int size) {
+            int rest = totalCount % size > 0 ? 1 : 0;
+            return totalCount / size + rest;
         }
     }
 }

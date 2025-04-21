@@ -29,11 +29,13 @@ public class BoardService {
         if (userId == null) {
 //            return boardRepository.findAll(page);
             List<Board> boards = boardRepository.findAll(page);
-            return new BoardResponse.DTO(boards, page + 1, page - 1);
+            Long totalCount = boardRepository.totalCount();
+            return new BoardResponse.DTO(boards, page, totalCount.intValue());
         } else {
 //            return boardRepository.findAll(userId, page);
             List<Board> boards = boardRepository.findAll(userId, page);
-            return new BoardResponse.DTO(boards, page + 1, page - 1);
+            Long totalCount = boardRepository.totalCount(userId);
+            return new BoardResponse.DTO(boards, page, totalCount.intValue());
         }
     }
 

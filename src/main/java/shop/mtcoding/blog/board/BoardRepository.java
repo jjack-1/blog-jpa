@@ -78,4 +78,19 @@ public class BoardRepository {
         query.setParameter("id", id);
         query.executeUpdate();
     }
+
+    // 로그인 x 4
+    // 로그인 o
+    // 로그인 - ssar 5
+    // 로그인 - ssar 아니면 4
+    public Long totalCount() {
+        Query query = em.createQuery("select count(b) from Board b where b.isPublic = true", Long.class); // 스칼라 데이터면 타입으로 받는다
+        return (Long) query.getSingleResult();
+    }
+
+    public Long totalCount(Integer userId) {
+        Query query = em.createQuery("select count(b) from Board b where b.isPublic = true or b.user.id = :userId", Long.class); // 스칼라 데이터면 타입으로 받는다
+        query.setParameter("userId", userId);
+        return (Long) query.getSingleResult();
+    }
 }
