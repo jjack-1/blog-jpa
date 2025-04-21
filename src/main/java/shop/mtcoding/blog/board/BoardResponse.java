@@ -73,21 +73,36 @@ public class BoardResponse {
         private Boolean isFirst; // currentPage를 알아야 한다
         private Boolean isLast; // totalCount, size=3, totalPage를 알아야 한다
         private List<Integer> numbers;
+        private Integer pageSize;
 
         public DTO(List<Board> boards, Integer current, Integer totalCount) {
             this.boards = boards;
             this.next = current + 1;
             this.prev = current - 1;
+            this.current = current;
             this.totalCount = totalCount;
             this.size = 3;
             this.totalPages = makeTotalPages(totalCount, this.size);
             this.isFirst = current == 0;
             this.isLast = current == this.totalPages - 1;
+            this.pageSize = 5;
+            this.numbers = makeNumbers(this.totalPages, current, this.pageSize);
         }
 
         private Integer makeTotalPages(int totalCount, int size) {
             int rest = totalCount % size > 0 ? 1 : 0;
             return totalCount / size + rest;
+        }
+
+        private List<Integer> makeNumbers(int totalPages, int current, int pageSize) {
+            List<Integer> numbers = new ArrayList<>();
+            for (int i = 0; i < totalPages; i++) {
+                numbers.add(i);
+            }
+            int currentIndex = current / pageSize; // [0,1,2,3,4] -> 0 [5,6,7,8,9] -> 1
+            int startNum = currentIndex * pageSize; // 0, 5, 10 ...
+            int endNum = (startNum + pageSize) <= totalPages ? (startNum + pageSize) : totalPages; // 5, 10, 15 ...
+            return numbers.subList(startNum, endNum); // 원본리스트에서 view만 만들어주는 메서드. (1, 5) 1~4까지 표시
         }
     }
 }
