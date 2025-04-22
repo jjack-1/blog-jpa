@@ -85,8 +85,7 @@ public class BoardResponse {
             this.totalPages = makeTotalPages(totalCount, this.size);
             this.isFirst = current == 0;
             this.isLast = current == this.totalPages - 1;
-            this.pageSize = 5;
-            this.numbers = makeNumbers(this.totalPages, current, this.pageSize);
+            this.numbers = makeNumbers(current, this.totalPages);
         }
 
         private Integer makeTotalPages(int totalCount, int size) {
@@ -94,15 +93,17 @@ public class BoardResponse {
             return totalCount / size + rest;
         }
 
-        private List<Integer> makeNumbers(int totalPages, int current, int pageSize) {
+        private List<Integer> makeNumbers(int current, int totalPage) {
             List<Integer> numbers = new ArrayList<>();
-            for (int i = 0; i < totalPages; i++) {
+
+            int start = (current / 5) * 5;
+            int end = Math.min(start + 5, totalPage);
+
+            for (int i = start; i < end; i++) {
                 numbers.add(i);
             }
-            int currentIndex = current / pageSize; // [0,1,2,3,4] -> 0 [5,6,7,8,9] -> 1
-            int startNum = currentIndex * pageSize; // 0, 5, 10 ...
-            int endNum = (startNum + pageSize) <= totalPages ? (startNum + pageSize) : totalPages; // 5, 10, 15 ...
-            return numbers.subList(startNum, endNum); // 원본리스트에서 view만 만들어주는 메서드. (1, 5) 1~4까지 표시
+
+            return numbers;
         }
     }
 }
