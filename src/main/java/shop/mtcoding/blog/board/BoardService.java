@@ -25,17 +25,17 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public BoardResponse.DTO 목록보기(Integer userId, Integer page) {
+    public BoardResponse.DTO 목록보기(Integer userId, Integer page, String keyword) {
         if (userId == null) {
 //            return boardRepository.findAll(page);
-            List<Board> boards = boardRepository.findAll(page);
-            Long totalCount = boardRepository.totalCount();
-            return new BoardResponse.DTO(boards, page, totalCount.intValue());
+            List<Board> boards = boardRepository.findAll(page, keyword);
+            Long totalCount = boardRepository.totalCount(keyword);
+            return new BoardResponse.DTO(boards, page, totalCount.intValue(), keyword);
         } else {
 //            return boardRepository.findAll(userId, page);
-            List<Board> boards = boardRepository.findAll(userId, page);
-            Long totalCount = boardRepository.totalCount(userId);
-            return new BoardResponse.DTO(boards, page, totalCount.intValue());
+            List<Board> boards = boardRepository.findAll(userId, page, keyword);
+            Long totalCount = boardRepository.totalCount(userId, keyword);
+            return new BoardResponse.DTO(boards, page, totalCount.intValue(), keyword);
         }
     }
 

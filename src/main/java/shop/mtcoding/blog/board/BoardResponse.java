@@ -74,8 +74,9 @@ public class BoardResponse {
         private Boolean isLast; // totalCount, size=3, totalPage를 알아야 한다
         private List<Integer> numbers;
         private Integer pageSize;
+        private String keyword; // null 이면 머스테치에서 터진다
 
-        public DTO(List<Board> boards, Integer current, Integer totalCount) {
+        public DTO(List<Board> boards, Integer current, Integer totalCount, String keyword) {
             this.boards = boards;
             this.next = current + 1;
             this.prev = current - 1;
@@ -86,6 +87,7 @@ public class BoardResponse {
             this.isFirst = current == 0;
             this.isLast = current == this.totalPages - 1;
             this.numbers = makeNumbers(current, this.totalPages);
+            this.keyword = keyword;
         }
 
         private Integer makeTotalPages(int totalCount, int size) {

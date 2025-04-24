@@ -34,21 +34,38 @@ public class BoardRepository {
 */
 
     // locahost:8080?page=0
-    public List<Board> findAll(int page) {
-        String sql = "select b from Board b where b.isPublic = true order by b.id desc";
+    public List<Board> findAll(int page, String keyword) {
+        String sql;
+
+        if (keyword.isBlank()) {
+            sql = "select b from Board b where b.isPublic = true order by b.id desc";
+
+        } else {
+            sql = "select b from Board b where b.isPublic = true and b.title like :keyword order by b.id desc";
+        }
+
         Query query = em.createQuery(sql, Board.class);
+        if (!keyword.isBlank()) query.setParameter("keyword", "%" + keyword + "%");
         query.setFirstResult(page * 3);
         query.setMaxResults(3);
 
         return query.getResultList();
     }
 
-    public List<Board> findAll(Integer userId, int page) {
-        String sql = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
+    public List<Board> findAll(Integer userId, int page, String keyword) {
+        String sql;
+        if (keyword.isBlank()) {
+            sql = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
+        } else {
+            sql = "select b from Board b where b.isPublic = true or b.user.id = :userId and b.title like :keyword order by b.id desc";
+        }
+
         Query query = em.createQuery(sql, Board.class);
         query.setParameter("userId", userId);
+        if (!keyword.isBlank()) query.setParameter("keyword", "%" + keyword + "%");
         query.setFirstResult(page * 3);
         query.setMaxResults(3);
+
         return query.getResultList();
     }
 
@@ -64,12 +81,14 @@ public class BoardRepository {
     public Board findByIdJoinUser(Integer id) {
         Query query = em.createQuery("select b from Board b join fetch b.user u where b.id = :id", Board.class);
         query.setParameter("id", id);
+
         return (Board) query.getSingleResult();
     }
 
     public Board findByIdJoinUserAndReplies(Integer id) {
         Query query = em.createQuery("select b from Board b join fetch b.user u left join fetch b.replies r left join fetch r.user where b.id = :id order by r.id desc", Board.class);
         query.setParameter("id", id);
+
         return (Board) query.getSingleResult();
     }
 
@@ -83,14 +102,32 @@ public class BoardRepository {
     // 로그인 o
     // 로그인 - ssar 5
     // 로그인 - ssar 아니면 4
-    public Long totalCount() {
-        Query query = em.createQuery("select count(b) from Board b where b.isPublic = true", Long.class); // 스칼라 데이터면 타입으로 받는다
+    public Long totalCount(String keyword) {
+        String sql;
+        if (!(keyword.isBlank())) {
+            sql = "select count(b) from Board b where b.isPublic = true and b.title like :keyword";
+        } else {
+            sql = "select count(b) from Board b where b.isPublic = true";
+        }
+        Query query = em.createQuery(sql, Long.class);
+        // keyword를 포함 : title like %keyword%
+        if (!(keyword.isBlank())) query.setParameter("keyword", "%" + keyword + "%");
+
         return (Long) query.getSingleResult();
     }
 
-    public Long totalCount(Integer userId) {
-        Query query = em.createQuery("select count(b) from Board b where b.isPublic = true or b.user.id = :userId", Long.class); // 스칼라 데이터면 타입으로 받는다
+    public Long totalCount(int userId, String keyword) {
+        String sql;
+        if (!(keyword.isBlank())) {
+            sql = "select count(b) from Board b where b.isPublic = true or b.user.id = :userId and b.title like :keyword";
+        } else {
+            sql = "select count(b) from Board b where b.isPublic = true or b.user.id = :userId";
+        }
+        Query query = em.createQuery(sql, Long.class);
+        // keyword를 포함 : title like %keyword%
+        if (!(keyword.isBlank())) query.setParameter("keyword", "%" + keyword + "%");
         query.setParameter("userId", userId);
+
         return (Long) query.getSingleResult();
     }
 }
